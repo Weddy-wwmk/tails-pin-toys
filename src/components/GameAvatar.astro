@@ -1,0 +1,37 @@
+---
+interface Props {
+    /** Game title used to derive the avatar initials and accessible label. */
+    title: string;
+    /** Stable value used to vary the avatar's accent color. */
+    seed: number;
+}
+
+const { title, seed } = Astro.props;
+const initials = title
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join('')
+    .toUpperCase();
+
+const avatarStyles = [
+    'from-blue-500 to-cyan-400',
+    'from-purple-500 to-fuchsia-400',
+    'from-emerald-500 to-teal-400',
+    'from-amber-500 to-orange-400',
+    'from-rose-500 to-pink-400',
+] as const;
+const accent = avatarStyles[Math.abs(seed) % avatarStyles.length];
+---
+
+<div
+    class:list={[
+        'flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br text-xl font-bold text-white shadow-lg ring-1 ring-white/20',
+        accent,
+    ]}
+    aria-hidden="true"
+    data-testid="game-avatar"
+>
+    {initials}
+</div>
